@@ -1,0 +1,32 @@
+# AI-Driven SQL Query Risk & Security Vulnerability Auditor
+
+An intelligent enterprise security tool that parses Natural Language Requests into optimized SQL Statements while continuously performing real-time structural risk analysis and vulnerability mitigation using Large Language Models (LLM Core) and Gemini API endpoints.
+
+---
+
+## 🏗️ Core Architecture Operational Flow Matrix
+
+1. **User Request Layer:** Front-end interactive system passes relational schema data vectors and user specifications via REST APIs.
+2. **LLM Transformation Pipeline:** Spring Boot orchestrates deep dynamic vector analysis using internal system parameters and maps intent into syntax-compliant SQL scripts.
+3. **Security Audit Core Layer:** Evaluates security vectors against corporate structural frameworks to generate vulnerability classifications (`LOW`, `MEDIUM`, `HIGH`) and flags risk vectors (`SENSITIVE_COLUMN`, `SELECT_STAR`).
+4. **Data Persistence Framework:** Permanently maps logs, generated SQL patterns, and threat matrix metrics array sequences inside localized MongoDB collections for unified audit review boards.
+
+---
+
+## 🛠️ Project Enterprise Tech Stack Configuration
+
+* **Backend Engine:** Java 17 / Spring Boot Web API Framework, Maven Compiler
+* **AI Processing Engine:** Google Gemini LLM API REST Model Services
+* **Database Management System:** MongoDB NoSQL Persistence Layer
+* **Frontend Component:** Standard Document Interface Models (Dynamic Custom DOM Engine, HTML5 Core, Vanilla CSS Elements Layout)
+
+---
+
+## 📈 Demo Verification Execution Path Matrix
+
+1. Run the localized backend server using the main Application pipeline inside IntelliJ IDEA IDE.
+2. Mount the local interface routing server link parameters inside Google Chrome web client:
+   `http://localhost:8080/index.html`
+3. Execute real-time user verification tests to observe automated vulnerability mitigation, colored risk badges, and operational flag definitions.
+4. Navigate layout headers to inspect the live audit log terminal overview from raw DB storage streams:
+   `http://localhost:8080/history.html`
