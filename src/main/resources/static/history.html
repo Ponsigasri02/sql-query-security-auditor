@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit History - SQL Query Agent</title>
+    <!-- Sharing the exact same stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <h1>SQL Query Agent</h1>
+    <div class="subtitle">AI-Driven Risk & Security Vulnerability Auditor</div>
+    <nav>
+        <a href="index.html">Analyze Query</a>
+        <a href="history.html" class="active">Audit History</a>
+    </nav>
+</header>
+
+<main>
+    <h2 style="margin-bottom: 20px; color: #1e2a38;">Compiled Database Logs</h2>
+
+    <!-- Live MongoDB Log Container Loop Insertion -->
+    <div id="historyContainer">
+        <p class="empty-state">🔄 Fetching audit logs from secure pipeline...</p>
+    </div>
+</main>
+
+<script>
+    const API_BASE = "http://localhost:8080/api";
+
+    async function loadAuditHistory() {
+        const container = document.getElementById('historyContainer');
+
+        try {
+            const response = await fetch(`${API_BASE}/history`);
+            if (!response.ok) throw new Error("Database network tunnel synchronization dropped.");
+
+            const logs = await response.json();
+            container.innerHTML = "";
+
+            if (!logs || logs.length === 0) {
+                container.innerHTML = "<div class='empty-state'>📬 No history logs captured in MongoDB collection repository yet.</div>";
+                return;
+            }
+
+            // Loop reverse direction to show latest queries at top
+            logs.reverse().forEach(log => {
+                const item = document.createElement('div');
+                item.className = "history-item";
+
+                // Format vulnerability tags string
+                let tagsText = "None";
+                if (log.riskFlags && log.riskFlags.length > 0) {
+                    tagsText = log.riskFlags.map(f => f.type).join(", ");
+                }
+
+                item.innerHTML = `
+                        <div class="history-request"><strong>Request:</strong> "${log.naturalLanguageRequest}"</div>
+                        <div style="margin-bottom: 6px;"><strong>SQL:</strong> <code style="font-family:monospace; background:#eee; padding:2px 4px; border-radius:4px;">${log.generatedSql}</code></div>
+                        <div>
+                            <span>Status: </span>
+                            <span id="riskLevelBadge" class="badge-${log.riskLevel || 'LOW'}" style="margin-left:0; padding:2px 8px; font-size:12px;">${log.riskLevel || 'LOW'} RISK</span>
+                            <span style="margin-left: 15px; font-size: 13px; color: #5a6b7b;"><strong>Flags:</strong> ${tagsText}</span>
+                        </div>
+                    `;
+                container.appendChild(item);
+            });
+
+        } catch (err) {
+            container.innerHTML = `<div class='error-box'>Error binding live history logs: ${err.message}</div>`;
+        }
+    }
+
+    // Auto trigger document loading mapping on mount
+    window.onload = loadAuditHistory;
+</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered SQL Query Agent</title>
+    <!-- Correctly linking your external styles.css file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <h1>SQL Query Agent</h1>
+    <div class="subtitle">AI-Driven Risk & Security Vulnerability Auditor</div>
+    <nav>
+        <a href="index.html" class="active">Analyze Query</a>
+        <a href="history.html">Audit History</a>
+    </nav>
+</header>
+
+<main>
+    <!-- Input Panel Card -->
+    <div class="form-section">
+        <label for="schemaInput">Database Schema Definition</label>
+        <textarea id="schemaInput" rows="3" placeholder="users(id, name, email, salary, password_hash)"></textarea>
+
+        <label for="requestInput">Natural Language Request</label>
+        <textarea id="requestInput" rows="3" placeholder="Show me everyone's email and salary configuration details."></textarea>
+
+        <button id="analyzeBtn" onclick="runSecurityAudit()">Analyze Vulnerability</button>
+    </div>
+
+    <!-- Real-Time Loading Core Dynamic Spinner -->
+    <div id="loadingIndicator" class="hidden">
+        <p>🔄 Running Deep Security Audit... Gemini is evaluating vector vulnerabilities...</p>
+    </div>
+
+    <!-- Dynamic Output Matrix Display Card -->
+    <div id="resultSection" class="hidden">
+        <h2>Security Vulnerability Assessment</h2>
+        <div style="margin-bottom: 15px; margin-top: 10px;">
+            <strong>Risk Evaluation Level:</strong>
+            <span id="riskLevelBadge"></span>
+        </div>
+
+        <h2>Generated AI SQL Statement</h2>
+        <div class="code-block" id="sqlOutput"></div>
+
+        <h2>Identified System Security Flag Vectors</h2>
+        <div id="flagsContainer">
+            <!-- Live generated threat loops dynamic code insertion inside script execution -->
+        </div>
+    </div>
+</main>
+
+<!-- JavaScript Core Connector Block -->
+<script>
+    const API_BASE = "http://localhost:8080/api";
+
+    async function runSecurityAudit() {
+        const schema = document.getElementById('schemaInput').value.trim();
+        const request = document.getElementById('requestInput').value.trim();
+
+        if (!schema || !request) {
+            alert("Please fill out both form specification logs before auditing.");
+            return;
+        }
+
+        const btn = document.getElementById('analyzeBtn');
+        const loader = document.getElementById('loadingIndicator');
+        const results = document.getElementById('resultSection');
+        const badge = document.getElementById('riskLevelBadge');
+
+        // UI Interaction Toggles
+        btn.disabled = true;
+        loader.classList.remove('hidden');
+        results.classList.add('hidden');
+
+        try {
+            const response = await fetch(`${API_BASE}/analyze`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ schemaDescription: schema, naturalLanguageRequest: request })
+            });
+
+            if (!response.ok) throw new Error("Server engine response mapping dropped.");
+            const data = await response.json();
+
+            // 1. Mount Code Compilation Input
+            document.getElementById('sqlOutput').innerText = data.generatedSql || "-- Empty SQL Return --";
+
+            // 2. Classify and Render Risk Color Badges
+            const risk = data.riskLevel || 'LOW';
+            badge.innerText = `${risk} RISK`;
+            // Applies badge-LOW, badge-MEDIUM, or badge-HIGH class from styles.css
+            badge.className = `badge-${risk}`;
+
+            // 3. Mount Risk Flag Elements Loops
+            const container = document.getElementById('flagsContainer');
+            container.innerHTML = "";
+
+            if (!data.riskFlags || data.riskFlags.length === 0) {
+                container.innerHTML = "<p class='risk-flag-explanation' style='color:#5a6b7b; font-style: italic; margin-top: 10px;'>No risks flagged for this structure logic query.</p>";
+            } else {
+                data.riskFlags.forEach(flag => {
+                    const card = document.createElement('div');
+                    card.className = "risk-flag-card";
+                    card.innerHTML = `
+                            <div class="risk-flag-type">${flag.type}</div>
+                            <div class="risk-flag-explanation">${flag.explanation}</div>
+                        `;
+                    container.appendChild(card);
+                });
+            }
+
+            loader.classList.add('hidden');
+            results.classList.remove('hidden');
+
+        } catch (err) {
+            alert(err.message);
+            loader.classList.add('hidden');
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>
